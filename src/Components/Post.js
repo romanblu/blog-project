@@ -1,9 +1,25 @@
 import React from 'react';
-import './post.css';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import PostComments from './PostComments';
-import './post.css';
+import { withStyles } from '@material-ui/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+
+
+const styles = theme => ({
+    root: {
+        maxWidth: 375
+    },
+    media:{
+        height:215
+    }
+});
+
 
 class Post extends React.Component {
     constructor(props){
@@ -62,6 +78,7 @@ class Post extends React.Component {
     }
     
     editDeleteButtons = () => {
+        
         return (
             this.state.isAuthor ? 
             <div className="edit-delete">
@@ -80,48 +97,66 @@ class Post extends React.Component {
             </div> : 'Not author'
         )
     } 
+
+     
+
     render() {
+        const { classes } = this.props;
         return (
-                <div className="post">
-                    <div className="content">
-                        <div className="content-holder">
-                            <h3><Link to={`/post/${this.state.id}`} className="blog-title">{this.props.title}</Link></h3>
+                // <div className="post">
+                //     <div className="content">
+                //         <div className="post-image">
+                //             <img src={this.props.imageSrc} alt="nice alpaca"/>
+                //         </div>
+                //         <div className="post-date">
+                //                 Posted {this.props.datePosted} by {this.state.authorName}
+                //         </div>
+                //         <div className="content-holder">
+                //             <h3><Link to={`/post/${this.state.id}`} className="blog-title">{this.props.title}</Link></h3>
                             
-                            <p className="description">{this.props.description}</p>
-                            <div className="post-date">
-                                Posted {this.props.datePosted} by {this.state.authorName}
-                            </div>
-
-                        </div>
-
-                        <div className="post-image">
-                            <img src={this.props.imageSrc} alt="nice alpaca"/>
-                        </div>
-
-                        
-                    </div>
-                    {this.state.isAuthor ? 
-                        <div className="edit-delete">
-                            <button class="delete-post-button" onClick={this.handlePostDelete} className="delete-post">Delete</button> 
-                            <button onClick={this.handlePostEdit} className="edit-post">
-                                <Link class="edit-post-button" to={{pathname:`/edit-post/${this.state.id}`,
-                                            state:{title:this.state.title,
-                                                    content:this.state.content,
-                                                    image:this.state.image}
-                                            }
-                                        }>
-                                    Edit
-                                </Link>
+                //             <p className="description">{this.props.description}</p>
+                //         </div>  
+                //     </div>
+                //     {this.state.isAuthor ? 
+                //         <div className="edit-delete">
+                //             <button class="delete-post-button" onClick={this.handlePostDelete} className="delete-post">Delete</button> 
+                //             <button onClick={this.handlePostEdit} className="edit-post">
+                //                 <Link class="edit-post-button" to={{pathname:`/edit-post/${this.state.id}`,
+                //                             state:{title:this.state.title,
+                //                                     content:this.state.content,
+                //                                     image:this.state.image}
+                //                             }
+                //                         }>
+                //                     Edit
+                //                 </Link>
                                 
-                            </button>
-                        </div> : ''
-                    }
+                //             </button>
+                //         </div> : ''
+                //     }
 
-                    <PostComments postId={this.state.id} authorId={this.state.authorId}/>
-                </div>
+                //     <PostComments postId={this.state.id} authorId={this.state.authorId}/>
+                // </div>
+                <Card className={classes.root}>
+                        <CardMedia 
+                            className={classes.media}
+                            image={this.props.imageSrc}
+                            title={this.props.title}
+                        />
+                        <CardContent>
+                            <Typography variant="body2" style={{marginBottom:10}} color="textSecondary" component="p">
+                                {this.props.date}
+                            </Typography>
+                            <Typography gutterBottom variant="h5" style={{marginBottom:15}} component="h2">
+                                {this.props.title}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                {this.props.description}
+                            </Typography>
+                        </CardContent>
+                </Card>
             );
     }
 
 }
 
-export default Post;
+export default withStyles(styles)(Post);

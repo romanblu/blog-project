@@ -12,10 +12,12 @@ const useStyles = makeStyles((theme) => ({
         alignContent:'center',
         gap:20,
         color:'rgb(38,38,38)',
-        height:50,
+        height:75,
         alignItems:'center',
-        margin:'0 50px'
 
+        backgroundColor:'#fff',
+        paddingLeft:'10%',
+        paddingRight:'10%',
     },
     navLink:{
         fontSize: 18,
@@ -55,17 +57,19 @@ export default function Navbar() {
     const classes = useStyles();
     
     return (
+
+        
         <div className={classes.root}>
-            <div className={classes.leftLinks}>
-                <Link to='/home' component={RouterLink} className={classes.navLink}>Home</Link>
-                <Link to='/about' component={RouterLink} className={classes.navLink}>About Us</Link>
-                <Link to='/contact' component={RouterLink} className={classes.navLink}>Contact</Link>
-                <Link to='/new-post' component={RouterLink} className={classes.navLink}>Add new post</Link>
-            </div>
-            <div className={classes.rightLinks}>
-                <Link to='/profile' component={RouterLink} className={classes.navLink}>Hello, Ricko</Link>
-                <Link to='/logout' component={RouterLink} className={classes.navLink}>Logout</Link>
-            </div>
+                <div className={classes.leftLinks}>
+                    <Link to='/home' component={RouterLink} className={classes.navLink}>Home</Link>
+                    <Link to='/about' component={RouterLink} className={classes.navLink}>About Us</Link>
+                    <Link to='/contact' component={RouterLink} className={classes.navLink}>Contact</Link>
+                    <Link to='/new-post' component={RouterLink} className={classes.navLink}>Add new post</Link>
+                </div>
+                <div className={classes.rightLinks}>
+                    <Link to='/profile' component={RouterLink} className={classes.navLink}>Hello, Ricko</Link>
+                    <Link to='/logout' component={RouterLink} className={classes.navLink}>Logout</Link>
+                </div>
         </div>
     )
 }

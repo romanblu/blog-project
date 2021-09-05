@@ -15,7 +15,7 @@ import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import styles from './App.module.css';
 
 const theme = createTheme({
-    maxWidth: 800
+    backgroundColor:'#eff4f2'
 })
 
 class App extends React.Component {
@@ -86,14 +86,14 @@ class App extends React.Component {
   
 
   render(){
-    console.log(styles)
     return (
     <ThemeProvider theme={theme}>
 
     <div className="App">
-        <div className={styles.container} >
           <Router>
             <Navbar />
+            <div className={styles.container} >
+
             {/* <div className="navbar">
                 <ul className="navbar-left">
                   <li><Link to="/">Home</Link></li>
@@ -111,38 +111,39 @@ class App extends React.Component {
                   }
                 </ul>
             </div> */}
-          
-            <Switch>
-              
-              <Route path="/about">
-                <About />
-              </Route>
-              
-              <Route path="/signin">
-                <SignIn onSignIn={this.setLogin} onLogout={this.setLogout} />
-                {this.state.user != null ? <Redirect to="/" /> : "" }
-              </Route>
-              <Route path="/signup">
-                <SignUp onSignIn={this.setLogin}/>
-                {this.state.user != null ? <Redirect to="/" /> : "" }
-              </Route>
-              <Route path="/logout">  
-                <Logout user={this.state.user}/>
-              </Route>
-              <Route path="/post/:id" component={PostPage}>
-              </Route>
-              
-              <Route path="/new-post">
-                <NewPost user={this.state.user} />
-              </Route>
-              <Route path="/edit-post/:postId" component={EditPost} />
-              <Route path="/">
-                <MainPage loggedUser={this.state.user || undefined} editPost={this.editPost}
-                deletePost={this.deletePost} />
-              </Route>
-            </Switch>
+            
+              <Switch>
+                
+                <Route path="/about">
+                  <About />
+                </Route>
+                
+                <Route path="/signin">
+                  <SignIn onSignIn={this.setLogin} onLogout={this.setLogout} />
+                  {this.state.user != null ? <Redirect to="/" /> : "" }
+                </Route>
+                <Route path="/signup">
+                  <SignUp onSignIn={this.setLogin}/>
+                  {this.state.user != null ? <Redirect to="/" /> : "" }
+                </Route>
+                <Route path="/logout">  
+                  <Logout user={this.state.user}/>
+                </Route>
+                <Route path="/post/:id" component={PostPage}>
+                </Route>
+                
+                <Route path="/new-post">
+                  <NewPost user={this.state.user} />
+                </Route>
+                <Route path="/edit-post/:postId" component={EditPost} />
+                <Route path="/">
+                  <MainPage loggedUser={this.state.user || undefined} editPost={this.editPost}
+                  deletePost={this.deletePost} />
+                </Route>
+              </Switch>
+            </div>     
+
           </Router> 
-        </div>     
       </div>
       </ThemeProvider>
 
