@@ -92,6 +92,30 @@ class MainPage extends React.Component{
             date:'August 19, 2021',
             image:'https://forrit-cms-msedu-consumables.azureedge.net/media/e9c432ba-1312-418f-9751-5f65218d070c/Blocks.png',
             tags:['Educators', 'School leaders', 'STEM']
+        },
+        {
+            id: 4,
+            title:'Announcing AP Computer Science Principles with Microsoft MakeCode',
+            description: 'In partnership with the United States College Board organization, whose mission is to expand access to higher education for every student, Microsoft is proud to announce a free new curriculum resource for high school educators who teach the College Board’s Advanced Placement Computer Science Principles course.',
+            date:'August 19, 2021',
+            image:'https://forrit-cms-msedu-consumables.azureedge.net/media/e9c432ba-1312-418f-9751-5f65218d070c/Blocks.png',
+            tags:['Educators', 'School leaders', 'STEM']
+        },
+        {
+            id: 5,
+            title:'Announcing AP Computer Science Principles with Microsoft MakeCode',
+            description: 'In partnership with the United States College Board organization, whose mission is to expand access to higher education for every student, Microsoft is proud to announce a free new curriculum resource for high school educators who teach the College Board’s Advanced Placement Computer Science Principles course.',
+            date:'August 19, 2021',
+            image:'https://forrit-cms-msedu-consumables.azureedge.net/media/e9c432ba-1312-418f-9751-5f65218d070c/Blocks.png',
+            tags:['Educators', 'School leaders', 'STEM']
+        },
+        {
+            id: 6,
+            title:'Announcing AP Computer Science Principles with Microsoft MakeCode',
+            description: 'In partnership with the United States College Board organization, whose mission is to expand access to higher education for every student, Microsoft is proud to announce a free new curriculum resource for high school educators who teach the College Board’s Advanced Placement Computer Science Principles course.',
+            date:'August 19, 2021',
+            image:'https://forrit-cms-msedu-consumables.azureedge.net/media/e9c432ba-1312-418f-9751-5f65218d070c/Blocks.png',
+            tags:['Educators', 'School leaders', 'STEM']
         }
     ]
 

@@ -13,10 +13,13 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     root: {
-        maxWidth: 375
+        minWidth: 375,
+        margin: 'auto',
+        height: '100%' // different height contents will have the same height
     },
     media:{
-        height:215
+        height:300,
+        width:'100%'
     }
 });
 
