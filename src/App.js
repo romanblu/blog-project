@@ -9,6 +9,8 @@ import PostPage from './pages/PostPage';
 import NewPost from './pages/NewPost';
 import Logout from './pages/Logout';
 import EditPost from './pages/EditPost';
+import Profile from './pages/Profile';
+
 import axios from 'axios';
 import Navbar from './Components/Navbar';
 import { ThemeProvider, createTheme } from '@material-ui/core/styles';
@@ -131,7 +133,8 @@ class App extends React.Component {
                 </Route>
                 <Route path="/post/:id" component={PostPage}>
                 </Route>
-                
+                <Route path="/profile" component={Profile}>
+                </Route>
                 <Route path="/new-post">
                   <NewPost user={this.state.user} />
                 </Route>
