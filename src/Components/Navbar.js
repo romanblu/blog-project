@@ -68,6 +68,8 @@ export default function Navbar() {
                 </div>
                 <div className={classes.rightLinks}>
                     <Link to='/profile' component={RouterLink} className={classes.navLink}>Hello, Ricko</Link>
+                    <Link to='/signin' component={RouterLink} className={classes.navLink}>Login</Link>
+
                     <Link to='/logout' component={RouterLink} className={classes.navLink}>Logout</Link>
                 </div>
         </div>

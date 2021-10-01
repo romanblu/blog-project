@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, ConvertFromRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { withStyles } from '@material-ui/styles';
 import draftToHtml from 'draftjs-to-html';
-
+import { convertToHTML} from 'draft-convert';
 
 const styles = theme => ({
     root:{
@@ -74,7 +74,6 @@ class NewPost extends React.Component {
     render  (){
         const { editorState } = this.state;
         const {classes} = this.props;
-        console.log(editorState)
         return (
             
             <div>
@@ -95,6 +94,15 @@ class NewPost extends React.Component {
                         disabled
                         value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
                     />
+                    
+                    <div dangerouslySetInnerHTML={{ __html: draftToHtml(convertToRaw(editorState.getCurrentContent())) }} />
+                    <div dangerouslySetInnerHTML={{ __html: convertToHTML(editorState.getCurrentContent()) }} />
+
+                    <Editor 
+                        editorState={EditorState.createWithContent(ConvertFromRaw(editorState))}
+                        readOnly={true}
+                    />
+
                     {/* <div className="new-post">
                         <h1>New Post</h1>
                         <label htmlFor="post-title">Title: </label>
@@ -107,7 +115,6 @@ class NewPost extends React.Component {
                         <input type="text" id="post-image" value={this.state.image} onChange={this.handleImageUrlChange}/>
                         <button type="submit" value="Send Post" className="submit-post" onClick={this.handleSubmit}>Send Post</button>
                     </div> */}
-                    <div dangerouslySetInnerHTML={{ __html: draftToHtml(convertToRaw(editorState.getCurrentContent())) }} />
                 </div>
             </div>
         );

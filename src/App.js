@@ -10,6 +10,7 @@ import NewPost from './pages/NewPost';
 import Logout from './pages/Logout';
 import EditPost from './pages/EditPost';
 import Profile from './pages/Profile';
+import AddPost from './pages/AddPost';
 
 import axios from 'axios';
 import Navbar from './Components/Navbar';
@@ -96,23 +97,6 @@ class App extends React.Component {
             <Navbar />
             <div className={styles.container} >
 
-            {/* <div className="navbar">
-                <ul className="navbar-left">
-                  <li><Link to="/">Home</Link></li>
-                  <li><Link to="/about">About Us</Link></li>
-                  
-                  <li><Link to="/post">Post</Link></li>
-                  <li><Link to="/new-post">New Post</Link></li>
-                </ul>
-                <ul className="navbar-right">
-                  { this.state.user != null ? <li><Link to={`/users/${this.state.user.username}`}>Hello {this.state.user.username}</Link></li>  :
-                  ""
-                  }
-                  { this.state.user != null ? <li><Link to="/logout" onClick={this.setLogout}>Logout</Link></li>  :
-                  <li><Link to="/signin">Sign In</Link></li>
-                  }
-                </ul>
-            </div> */}
             
               <Switch>
                 
@@ -136,7 +120,7 @@ class App extends React.Component {
                 <Route path="/profile" component={Profile}>
                 </Route>
                 <Route path="/new-post">
-                  <NewPost user={this.state.user} />
+                  <AddPost user={this.state.user} />
                 </Route>
                 <Route path="/edit-post/:postId" component={EditPost} />
                 <Route path="/">
