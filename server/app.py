@@ -6,19 +6,32 @@ from settings import apikey, dbpwd
 import json
 import bcrypt
 import uuid 
+import mysql.connector.pooling
 
-db = mysql.connect(
+pool = mysql.connector.pooling.MySQLConnectionPool(
 	host="localhost",
 	user="root",
 	passwd=dbpwd,
-	database="blog"
+	database="blog",
+	buffered=True,
+	pool_size=3
 )
+
+# db = mysql.connect(
+# 	host="localhost",
+# 	user="root",
+# 	passwd=dbpwd,
+# 	database="blog"
+# )
 
 
 app = Flask(__name__)
 
 @app.route('/api/login', methods=['POST'])
 def login():
+
+	db = pool.get_connection()
+
 	data = request.get_json()
 	query = "select id, password from users where username = %s "
 	values = (data['user'], )
@@ -31,7 +44,15 @@ def login():
 	hashed_pwd = record[1].encode('utf-8')
 	if bcrypt.hashpw(data['password'].encode('utf-8'), hashed_pwd) != hashed_pwd:
 			abort(401)
+	db.close()
+	return create_session(user_id)
 
+
+def create_session(user_id):
+
+	db = pool.get_connection()
+
+	cursor = db.cursor()
 	session_id = str(uuid.uuid4())
 	query = "insert into sessions (user_id, session_id) values (%s, %s) on duplicate key update session_id=%s"
 	values = (user_id, session_id, session_id)
@@ -41,10 +62,13 @@ def login():
 	resp.set_cookie("session_id", session_id)
 	cursor.close()
 	
+	db.close()
 	return resp
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
+	db = pool.get_connection()
+
 	id = validate_session()
 	print("SESSION ID ", id)
 	query = "delete from sessions where session_id = %s"
@@ -55,9 +79,13 @@ def logout():
 	resp = make_response()
 	resp.set_cookie('session_id' ,'', expires=0)
 	cursor.close()
+	db.close()
+
 	return resp
 
 def validate_session():
+	db = pool.get_connection()
+
 	session_id = request.cookies.get('session_id')
 	print(request.cookies.get('session_id'))
 	if not session_id:
@@ -70,20 +98,26 @@ def validate_session():
 	cursor.close()
 	if not record:
 		abort(401)
+	db.close()
+
 	return session_id
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
+	db = pool.get_connection()
+
 	data = request.get_json()
-	query = "insert into users (username, password) values(%s, %s)"
+	query = "insert into users (name, username, password) values(%s, %s, %s)"
 	hashed_pwd = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
-	values = (data['user'], hashed_pwd)
+	values = (data['name'], data['user'], hashed_pwd)
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	db.commit()
-	new_post_id = cursor.lastrowid
+	new_user_id = cursor.lastrowid
 	cursor.close()
-	return get_user(new_post_id)
+	db.close()
+
+	return create_session(new_user_id)
 
 @app.route('/api/posts/<id>', methods=['GET', 'DELETE','PUT'])
 def post_operations(id):
@@ -95,6 +129,8 @@ def post_operations(id):
 		return update_post(id)
 
 def get_post(id):
+	db = pool.get_connection()
+
 	query = "select id, title, content, image, author_id from posts where id = %s"
 	values = (id, )
 	cursor = db.cursor()
@@ -102,18 +138,26 @@ def get_post(id):
 	record = cursor.fetchone()
 	cursor.close()
 	header = ['id', 'title', 'content', 'image', 'author_id']
+	db.close()
+
 	return json.dumps(dict(zip(header, record)))
 
 def delete_post(id):
+	db = pool.get_connection()
+
 	query = "DELETE FROM posts WHERE id = %s"
 	values = (id, )
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	db.commit()
 	cursor.close()
+	db.close()
+
 	return "Deleted post "
 
 def update_post(id):
+	db = pool.get_connection()
+
 	data = request.get_json()
 	query = "UPDATE posts set title=(%s), content=(%s), image=(%s) where id=%s "
 	values = (data['title'], data['content'], data['image'], id)
@@ -123,6 +167,8 @@ def update_post(id):
 	cursor.execute(query, values)
 	db.commit()
 	cursor.close()
+	db.close()
+
 	return "Post updated"
 
 @app.route('/api/posts/<id>/comments', methods=['GET', 'POST'])
@@ -133,6 +179,8 @@ def comments(id):
 		return add_comment(id)
 
 def add_comment(id):
+	db = pool.get_connection()
+
 	data = request.get_json()
 	query = "INSERT INTO comments (author_id, post_id, content) VALUES (%s, %s, %s)"
 	values = (data['author_id'], id, data['content'])
@@ -142,9 +190,13 @@ def add_comment(id):
 	new_comment_id = cursor.lastrowid
 
 	cursor.close()
+	db.close()
+
 	return get_comment(new_comment_id)
 
 def get_all_comments(id):
+	db = pool.get_connection()
+
 	query = "SELECT id, author_id, post_id, content FROM comments WHERE post_id=%s"
 	values = (id, )
 	cursor = db.cursor()
@@ -155,9 +207,13 @@ def get_all_comments(id):
 	data = []
 	for r in records:
 		data.append(dict(zip(header, r)))
+	db.close()
+
 	return json.dumps(data)
 
 def get_comment(id):
+	db = pool.get_connection()
+
 	query = "SELECT id, author_id, post_id, content FROM comments WHERE id=%s"
 	values = (id,)
 	cursor = db.cursor()
@@ -165,6 +221,7 @@ def get_comment(id):
 	record = cursor.fetchone()
 	cursor.close()
 	header = ['comment_id', 'author_id', 'post_id', 'content']
+	db.close()
 
 	return json.dumps(dict(zip(header, record)))
 
@@ -177,6 +234,8 @@ def manage_posts():
 		return add_post()
 
 def add_post():
+	db = pool.get_connection()
+
 	data = request.get_json()
 	query = "insert into posts (title, content, image, author_id) values(%s, %s, %s, %s)"
 	values = (data['title'], data['content'], data['image'], data['author_id'])
@@ -185,9 +244,13 @@ def add_post():
 	db.commit()
 	new_post_id = cursor.lastrowid
 	cursor.close()
+	db.close()
+
 	return get_post(new_post_id)
 
 def get_all_posts():
+	db = pool.get_connection()
+
 	query="select id, title, content, image, author_id from posts "
 	cursor = db.cursor()
 	cursor.execute(query)
@@ -197,10 +260,14 @@ def get_all_posts():
 	data = []
 	for r in records:
 		data.append(dict(zip(header,r)))
+	db.close()
+
 	return json.dumps(data)
 
 @app.route('/api/users/<id>')
 def get_user(id):
+	db = pool.get_connection()
+
 	query = "select id, username, password from users where id = %s"
 	values = (id, )
 	cursor = db.cursor()
@@ -208,10 +275,13 @@ def get_user(id):
 	record = cursor.fetchone()
 	cursor.close()
 	header = ['id', 'username', 'password']
+	db.close()
+
 	return json.dumps(dict(zip(header, record)))
 
 @app.route('/api/user', methods=['GET'])
 def check_login():
+	db = pool.get_connection()
 	session_id = request.cookies.get('session_id')
 	if not session_id:
 		abort(401)
@@ -224,6 +294,8 @@ def check_login():
 	if not record:
 		abort(401)
 	header = ['user_id']
+
+	db.close()
 	return json.dumps(dict(zip(header, record)))
 
 if __name__ == "__main__":

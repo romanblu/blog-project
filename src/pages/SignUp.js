@@ -35,6 +35,7 @@ class SignIn extends React.Component {
         e.preventDefault();
         const url = "/api/signup";
         const data = {
+            name: this.state.name,
             user : this.state.user,
             password: this.state.password,
         }
@@ -64,6 +65,7 @@ class SignIn extends React.Component {
                             Sign Up
                         </Typography>
                         <form action="">
+                            <TextField onChange={this.changeName} label="Name" variant="outlined" required fullWidth margin="normal"/>
                             <TextField onChange={this.changeUsername} label="Username" variant="outlined" required fullWidth margin="normal"/>
                             <TextField onChange={this.changePassword} label="Password" type="password" variant="outlined" required fullWidth margin="normal"/>
                             <TextField onChange={this.changeRepeatPassword} label="Repeat Password" type="password" variant="outlined" required fullWidth margin="normal"/>
