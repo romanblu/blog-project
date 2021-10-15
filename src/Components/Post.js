@@ -9,6 +9,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import  { Redirect } from 'react-router-dom'
+import {Button} from '@material-ui/core';
 
 
 const styles = theme => ({
@@ -19,7 +21,14 @@ const styles = theme => ({
     },
     media:{
         height:300,
-        width:'100%'
+        width:'100%',
+        cursor: 'pointer'
+    },
+    title:{
+        cursor:'pointer'
+    },
+    author:{
+        marginLeft:15
     }
 });
 
@@ -29,15 +38,17 @@ class Post extends React.Component {
         super(props);
         this.state = {
             id: this.props.id,
+            index: this.props.index,
             title: this.props.title,
             description: this.props.description,
             date: this.props.datePosted,
-            authorName: "",
+            authorName: this.props.authorName,
             authorId: this.props.authorId,
             image: this.props.imageSrc,
             loggedUser : this.props.currentUser, // issue - not rerendering when app gets current user 
             isAuthor: false,
-            hasUpdated: false
+            hasUpdated: false,
+            redirect:false
         }
     } 
 
@@ -68,11 +79,25 @@ class Post extends React.Component {
     handlePostDelete = () => {
         const id = this.state.id;
         const url = `api/posts/${id}`;
+        
         axios.delete(url).then(res => {
           console.log("Posts deleted")
+          this.props.deletePost(id);
         }).catch((err) => console.log("Could not delete post. Error: ", err))       
         
         this.props.hasUpdated();
+    }
+
+    redirectToPost = () => {
+        this.setState({
+            redirect:true
+        })
+    }
+
+    renderRedirect = () => {
+        if(this.state.redirect){
+            return <Redirect to={`post/${this.state.id}`} />;
+        }
     }
 
     handlePostEdit = () => {
@@ -85,8 +110,8 @@ class Post extends React.Component {
         return (
             this.state.isAuthor ? 
             <div className="edit-delete">
-                <button onClick={this.handlePostDelete} className="delete-post">Delete</button> 
-                <button onClick={this.handlePostEdit} className="edit-post">
+                <Button onClick={this.handlePostDelete} className="delete-post">Delete</Button> 
+                <Button onClick={this.handlePostEdit} className="edit-post">
                     <Link to={{pathname:`/edit-post/${this.state.id}`,
                                 state:{title:this.state.title,
                                         content:this.state.content,
@@ -96,8 +121,8 @@ class Post extends React.Component {
                         Edit
                     </Link>
                     
-                </button>
-            </div> : 'Not author'
+                </Button>
+            </div> : ''
         )
     } 
 
@@ -140,22 +165,28 @@ class Post extends React.Component {
                 //     <PostComments postId={this.state.id} authorId={this.state.authorId}/>
                 // </div>
                 <Card className={classes.root}>
-                        <CardMedia 
+                        <CardMedia onClick={this.redirectToPost}
                             className={classes.media}
-                            image={this.props.imageSrc}
+                            image={this.props.image}
                             title={this.props.title}
                         />
+                        {this.editDeleteButtons()}
+                        <Typography className={classes.author} component="p" variant="h6" align="left" >
+                            writen by {this.state.authorName}
+                        </Typography>
                         <CardContent>
                             <Typography variant="body2" style={{marginBottom:10}} color="textSecondary" component="p">
                                 {this.props.date}
                             </Typography>
-                            <Typography gutterBottom variant="h5" style={{marginBottom:15}} component="h2">
+                            <Typography onClick={this.redirectToPost.bind(this)} className={classes.title} gutterBottom variant="h5" style={{marginBottom:15}} component="h2">
                                 {this.props.title}
                             </Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
                                 {this.props.description}
                             </Typography>
                         </CardContent>
+                        {this.renderRedirect()}
+
                 </Card>
             );
     }

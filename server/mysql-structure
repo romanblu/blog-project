@@ -9,8 +9,8 @@ create table users(
 
 create table posts (
     id int not null auto_increment,
-    title varchar(40) not null,
-    content varchar(255) not null,
+    title varchar(255) not null,
+    content text not null,
     image varchar(255) not null,
     author_id int,
     posted_at datetime default now(),
@@ -33,8 +33,8 @@ create table posts_tags (
 
 
 create table sessions (
-    user_id int,
-    session_id int not null,
+    user_id int primary key,
+    session_id varchar(255) not null
 );
 
 create table comments (

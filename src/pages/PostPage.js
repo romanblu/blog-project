@@ -2,6 +2,41 @@ import React from 'react';
 import PostsList from '../Components/PostsList';
 import Post from '../Components/Post';
 import axios from 'axios';
+import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
+import { mergeClasses, withStyles } from '@material-ui/styles';
+
+// import '../App.module.css';
+
+
+const styles = theme => ({
+    root: {
+        // backgroundColor: '#fff'
+    },
+    container:{
+        backgroundColor: '#fff',
+        paddingTop:75,
+        maxWidth: 800,
+        margin: 'auto',
+    },
+    image:{
+        marginTop:35,
+        marginBottom:50,
+        width:'100%'
+    },
+    content:{
+        paddingLeft:30,
+        paddingRight:30,
+        paddingBottom:50
+    },
+    title:{
+        marginLeft:25,
+        marginRight:25
+    },
+    author:{
+        marginTop: 25,
+        marginLeft:25
+    }
+});
 
 class PostPage extends React.Component {
     constructor(props){
@@ -17,7 +52,7 @@ class PostPage extends React.Component {
             title: this.props.title,
             content: this.props.description,
             date: this.props.datePosted,
-            authorName: "",
+            authorName: this.props.username,
             authorId: this.props.authorId,
             image: this.props.imageSrc
 
@@ -25,34 +60,7 @@ class PostPage extends React.Component {
     }
     
     
-    posts = [
-        {
-            title:"Blog post #1",
-            description:"My  first blog post  is all about my  blog post  and how to write a new post in my blog, find it here",
-            dateNumber: 2 ,
-            dateUnit:"days",
-            authorName:"Israel",
-            imageSrc:"https://cdn.pixabay.com/photo/2015/10/12/20/52/alpaca-985158_960_720.jpg"
-        },
-        {
-            title:"Blog post #2",
-            description:"My first blog post is all about my blog post and how to write a new post in my blog, find it heret",
-            dateNumber: 2 ,
-            dateUnit:"days",
-            authorName:"Joe",
-            imageSrc:"https://images.unsplash.com/photo-1511885663737-eea53f6d6187?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80"
-        },
-        {
-            title:"Blog post #3",
-            description:"My third blog post is all about my blog post",
-            dateNumber: 3 ,
-            dateUnit:"days",
-            authorName:"Israel",
-            imageSrc:"https://images.unsplash.com/photo-1534615098829-958121bcc188?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-        }
-        
-    ];
-
+   
     
     getAuthorNameById = (id) => {
         const url = "/api/users/"+id;
@@ -67,14 +75,14 @@ class PostPage extends React.Component {
     getPostById = (id) => {
         const url = "/api/posts/" + id;
         axios.get(url).then((res) => {
-           console.log("POST DATA ",res)
             this.setState({
                 data:res.data,
                 id: id,
                 title: res.data.title,
                 content: res.data.content,
                 authorId: res.data.author_id,
-                image: res.data.image
+                image: res.data.image,
+                authorName: res.data.author_name
             });
 
           
@@ -90,59 +98,40 @@ class PostPage extends React.Component {
 
     render () {
         
-    const postsLinks1 = [
-        {
-            postTitle: "Blog post #1 ",
-            destination:"#"
-        },
-        {
-            postTitle: "Blog post #2 ",
-            destination:"#"
-        },
-        {
-            postTitle: "Blog post #3 ",
-            destination:"#"
-        }
-    ];
-    const postsLinks2 = [
-        {
-            postTitle: "Blog post #3 ",
-            destination:"#"
-        },
-        {
-            postTitle: "Blog post #1 ",
-            destination:"#"
-        },
-        {
-            postTitle: "Blog post #2 ",
-            destination:"#"
-        }
-    ];
+        const { classes } = this.props;
+        console.log(this.state)
         
         return (
             
-            <div>
-                <div className="container">
-                    <div className="blog-posts">
-                           
-                        <Post title={this.state.title} 
+            <div className={classes.root}>
+                <div className={classes.container}>
+                        {/* <Post title={this.state.title} 
                         description={this.state.content} 
                         authorName={this.state.authorName}
                         imageSrc={this.state.image}
                         id={this.state.id} 
                         authorId={this.state.authorId}
-                        />
-                    </div>
+                        /> */}
+         
+                        <Typography className={classes.title} component="h3" variant="h4" align="center" >
+                            {this.state.title}
+                        </Typography>
+                        <Typography className={classes.author} component="p" variant="h6" align="left" >
+                            writen by {this.state.authorName}
+                        </Typography>
+                        <img className={classes.image} src={this.state.image}/>
 
-                    <div className="sidebar">
+                        <div className={classes.content} dangerouslySetInnerHTML={{__html:this.state.content}}>
+
+                        </div>
+                    {/* <div className="sidebar">
                         <PostsList title="Latest" postsLinks={postsLinks1}/>
                         <PostsList title="Popular" postsLinks={postsLinks2}/>
-                    </div>
-                    
-                </div>
+                    </div> */}
+                </div> 
             </div>
         );
     }
 }
 
-export default PostPage;
+export default withStyles(styles)(PostPage);

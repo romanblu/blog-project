@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles';
 import Link from  '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root:{
@@ -53,9 +54,15 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default function Navbar() {
+export default function Navbar(props) {
+    const [user, setUser] = useState('');
+
     const classes = useStyles();
     
+    const onLogout = () => {
+        props.setLogout();
+    }
+
     return (
 
         
@@ -67,10 +74,17 @@ export default function Navbar() {
                     <Link to='/new-post' component={RouterLink} className={classes.navLink}>Add new post</Link>
                 </div>
                 <div className={classes.rightLinks}>
-                    <Link to='/profile' component={RouterLink} className={classes.navLink}>Hello, Ricko</Link>
-                    <Link to='/signin' component={RouterLink} className={classes.navLink}>Login</Link>
-
-                    <Link to='/logout' component={RouterLink} className={classes.navLink}>Logout</Link>
+                    {
+                        props.user ? <Link to='/profile' component={RouterLink} className={classes.navLink}>Hello, {props.user.username}</Link> 
+                        : ''
+                    }
+                    
+                    
+                    {
+                        props.user ? <Typography onClick={onLogout} component={RouterLink} className={classes.navLink}>Logout</Typography>
+                        :
+                        <Link to='/signin' component={RouterLink} className={classes.navLink}>Login</Link>               
+                    }
                 </div>
         </div>
     )

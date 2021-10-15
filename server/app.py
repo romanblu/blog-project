@@ -131,13 +131,13 @@ def post_operations(id):
 def get_post(id):
 	db = pool.get_connection()
 
-	query = "select id, title, content, image, author_id from posts where id = %s"
+	query = "select id, title, content, image, author_id, author_name from posts where id = %s"
 	values = (id, )
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	record = cursor.fetchone()
 	cursor.close()
-	header = ['id', 'title', 'content', 'image', 'author_id']
+	header = ['id', 'title', 'content', 'image', 'author_id', 'author_name']
 	db.close()
 
 	return json.dumps(dict(zip(header, record)))
@@ -237,8 +237,8 @@ def add_post():
 	db = pool.get_connection()
 
 	data = request.get_json()
-	query = "insert into posts (title, content, image, author_id) values(%s, %s, %s, %s)"
-	values = (data['title'], data['content'], data['image'], data['author_id'])
+	query = "insert into posts (title, content, image, author_id, author_name) values(%s, %s, %s, %s, %s)"
+	values = (data['title'], data['content'], data['image'], data['author_id'], data['author_name'])
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	db.commit()
@@ -251,12 +251,12 @@ def add_post():
 def get_all_posts():
 	db = pool.get_connection()
 
-	query="select id, title, content, image, author_id from posts "
+	query="select id, title, content, image, author_id, author_name from posts "
 	cursor = db.cursor()
 	cursor.execute(query)
 	records = cursor.fetchall()
 	cursor.close()
-	header = ['id', 'title', 'content', 'image', 'author_id']
+	header = ['id', 'title', 'content', 'image', 'author_id', 'author_name']
 	data = []
 	for r in records:
 		data.append(dict(zip(header,r)))

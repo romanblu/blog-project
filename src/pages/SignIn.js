@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
+import { Redirect } from "react-router";
 
 class SignIn extends React.Component {
     constructor(props){
@@ -9,7 +10,8 @@ class SignIn extends React.Component {
             resp: null,
             user:null,
             password:null,
-            error: false
+            error: false,
+            redirect:false
         };
     }
 
@@ -38,7 +40,8 @@ class SignIn extends React.Component {
             this.setState({
                 data: [],
                 resp: "Success, user logged in ",
-                error: false
+                error: false,
+                redirect:true
             });
             this.props.onSignIn(data);
 
@@ -49,6 +52,12 @@ class SignIn extends React.Component {
                 error: true
             });
         });
+    }
+
+    handleRedirect = () => {
+        if(this.state.redirect){
+            return <Redirect to='/'/>
+        }
     }
 
     render () {
@@ -84,7 +93,7 @@ class SignIn extends React.Component {
                     </Box>
                     
                 </Container>
-               
+                {this.handleRedirect()}               
             </>
         );
     }

@@ -90,11 +90,11 @@ class App extends React.Component {
 
   render(){
     return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} >
 
     <div className="App">
           <Router>
-            <Navbar />
+            <Navbar user={this.state.user} setLogout={this.setLogout}/>
             <div className={styles.container} >
 
             
@@ -106,11 +106,11 @@ class App extends React.Component {
                 
                 <Route path="/signin">
                   <SignIn onSignIn={this.setLogin} onLogout={this.setLogout} />
-                  {this.state.user != null ? <Redirect to="/" /> : "" }
+                  {/* {this.state.user != null ? <Redirect to="/" /> : "" } */}
                 </Route>
                 <Route path="/signup">
                   <SignUp onSignIn={this.setLogin}/>
-                  {this.state.user != null ? <Redirect to="/" /> : "" }
+                  {/* {this.state.user != null ? <Redirect to="/" /> : "" } */}
                 </Route>
                 <Route path="/logout">  
                   <Logout user={this.state.user}/>
