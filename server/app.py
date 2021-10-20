@@ -182,8 +182,8 @@ def add_comment(id):
 	db = pool.get_connection()
 
 	data = request.get_json()
-	query = "INSERT INTO comments (author_id, post_id, content) VALUES (%s, %s, %s)"
-	values = (data['author_id'], id, data['content'])
+	query = "INSERT INTO comments (author_id, author_name, post_id, content) VALUES (%s, %s, %s, %s)"
+	values = (data['author_id'], data['author_name'], id, data['content'])
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	db.commit()
@@ -197,13 +197,13 @@ def add_comment(id):
 def get_all_comments(id):
 	db = pool.get_connection()
 
-	query = "SELECT id, author_id, post_id, content FROM comments WHERE post_id=%s"
+	query = "SELECT id, author_id, author_name, post_id, content FROM comments WHERE post_id=%s"
 	values = (id, )
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	records = cursor.fetchall()
 	cursor.close()
-	header = [ 'comment_id', 'author_id', 'post_id', 'content']
+	header = [ 'comment_id', 'author_id','author_name', 'post_id', 'content']
 	data = []
 	for r in records:
 		data.append(dict(zip(header, r)))
@@ -214,13 +214,13 @@ def get_all_comments(id):
 def get_comment(id):
 	db = pool.get_connection()
 
-	query = "SELECT id, author_id, post_id, content FROM comments WHERE id=%s"
+	query = "SELECT id, author_id, author_name, post_id, content FROM comments WHERE id=%s"
 	values = (id,)
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	record = cursor.fetchone()
 	cursor.close()
-	header = ['comment_id', 'author_id', 'post_id', 'content']
+	header = ['comment_id', 'author_id', 'author_name', 'post_id', 'content']
 	db.close()
 
 	return json.dumps(dict(zip(header, record)))

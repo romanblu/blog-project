@@ -3,6 +3,7 @@ import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 import { Editor } from "@tinymce/tinymce-react";
 import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
+import { Redirect } from 'react-router';
 
 
 const styles = theme => ({
@@ -19,7 +20,8 @@ class EditPost extends Component {
             title:"",
             postContent:"",
             image:"",
-            postId: this.props.match.params.postId
+            postId: this.props.match.params.postId,
+            redirect:false
         }
 
         this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -33,7 +35,6 @@ class EditPost extends Component {
     componentDidMount(){
         const url = `/api/posts/${this.props.match.params.postId}`;
         axios.get(url).then((res) => {
-            console.log("Post data ",res);
             this.setState({
                 title: res.data.title,
                 postContent: res.data.content,
@@ -57,7 +58,6 @@ class EditPost extends Component {
     }
 
     onChange(e){
-        console.log(e.target.getContent())
         this.setState({
             postContent:e.target.getContent()
         })
@@ -71,10 +71,17 @@ class EditPost extends Component {
             content: this.state.postContent,
             image: this.state.image,
             };
-        axios.put(url, data).then(res => console.log("SUCCESS ",res)).catch(err => console.log("error", err));
+        axios.put(url, data).then(res => {
+            console.log("SUCCESS ",res)
+            this.setState({redirect:true})
+        }).catch(err => console.log("error", err));
     }
     
-
+    handleRedirect = () => {
+        if(this.state.redirect){
+            return <Redirect to={`/post/${this.state.postId}`}/>
+        }
+    }
 
     render() {
 
@@ -114,21 +121,7 @@ class EditPost extends Component {
                     Submit Edit
                 </Button>
 
-                {/* <div className="container">
-                    <div className="new-post">
-                        <h1>New Post</h1>
-                        <label htmlFor="post-title">Title: </label>
-                        <input type="text" id="post-title" value={this.state.title} onChange={this.handleTitleChange}/>
-                        <label htmlFor="post-content">Write Post Content:</label>
-                        <textarea name="content" id="new-post-content" cols="30" rows="10" className="new-post-content" 
-                        value={this.state.content} onChange={this.handleContentChange}></textarea>
-                        <p className="characters-left smaller-font">256 characters left</p>
-                        <label htmlFor="post-image">Enter image url: </label>
-                        <input type="text" id="post-image" value={this.state.image} onChange={this.handleImageUrlChange}/>
-                        <button type="submit" value="Send Post" className="submit-post" onClick={this.handleSubmit}>Send Post</button>
-                    </div>
-                    
-                </div> */}
+               {this.handleRedirect()}
             </div>
         )
     }

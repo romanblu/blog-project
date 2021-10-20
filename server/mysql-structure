@@ -41,11 +41,12 @@ create table comments (
     id int not null auto_increment,
     author_id int,
     post_id int,
-    foreign key(author_id) references users(id),
-    foreign key(post_id) references posts(id),
     content varchar(255) not null,
-    publish_date datetime
+    publish_date datetime,
+    primary key (id),
 
+    foreign key(author_id) references users(id),
+    foreign key(post_id) references posts(id)
 );
 
 insert into posts 
