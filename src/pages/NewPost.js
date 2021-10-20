@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { EditorState, convertToRaw, ConvertFromRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw, ConvertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { withStyles } from '@material-ui/styles';

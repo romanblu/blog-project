@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 import { Editor } from "@tinymce/tinymce-react";
-import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
+import {Button, TextField, Typography} from '@material-ui/core';
 import { Redirect } from 'react-router';
 
 

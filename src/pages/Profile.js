@@ -1,7 +1,5 @@
 import React from 'react';
 import "./Profile.css";
-import axios from "axios";
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
 class Profile extends React.Component {
 

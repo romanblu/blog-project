@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/styles';
 import Link from  '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
@@ -55,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Navbar(props) {
-    const [user, setUser] = useState('');
 
     const classes = useStyles();
     

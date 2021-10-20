@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
-import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
+import {Button, TextField, Typography} from '@material-ui/core';
 import {  makeStyles } from '@material-ui/styles';
 import { useParams } from 'react-router';
 const useStyles =  makeStyles({
@@ -19,13 +19,7 @@ const useStyles =  makeStyles({
     },
     userAvatar:{
         verticalAlign: 'middle',
-        // marginTop: 'auto',
-        // marginBottom: 'auto',
-        verticalAlign: 'middle',
         textAlign: 'center',
-        //  borderRadius: '50%',
-        //  overflow:'hidden',
-        //  position:'center'
     },
     userAvatarImage:{
         borderRadius: '50%',
@@ -58,56 +52,14 @@ function PostComments(props) {
     const [newCommentContent, setNewCommentContent] = useState('');
     const [postComments, setPostComments] = useState([])
     const classes = useStyles();
-    const demoComments = [
-        {
-            authorName: 'Ricardo',
-            authorId:12,
-            postId:10,
-            content: 'Whats up',
-            date: "Today at 15:03"
-        },
-        {
-            authorName: 'Ricardo2',
-            authorId:12,
-            postId:10,
-            content: 'Whats up',
-            date: "Today at 15:03"
-        },
-        {
-            authorName: 'Ricardo3',
-            authorId:12,
-            postId:10,
-            content: 'Whats up',
-            date: "Today at 15:03"
-        },
-        {
-            authorName: 'Ricardo4',
-            authorId:12,
-            postId:10,
-            content: 'lLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularise',
-            date: "Today at 15:03"
-        },
-        {
-            authorName: 'Ricardo6',
-            authorId:12,
-            postId:10,
-            content: 'Whats up',
-            date: "Today at 15:03"
-        }
-    ]
+    
     const {id} = useParams(); 
-    console.log("POST ID ", id);
 
     useEffect(() => {
         const url = `/api/posts/${id}/comments`;
         axios.get(url).then(res => {
-            let allComments = []
-            res.data.map(comment => {
-                
-                allComments.push({...comment});
-            })
-            console.log(allComments);
-            setPostComments(allComments);
+            setPostComments(res.data)
+            
         })
         .catch(err => console.log("Error fetching comments ", err));
     }, [])
@@ -146,24 +98,11 @@ function PostComments(props) {
             }])
         }).catch(err => console.log("error adding a comment, ", err));
 
-        // axios.get(`api/users/${props.authorId}`).then(user => {
-        //     axios.post(url, data).then(res => {
-
-        //         setPostComments([...postComments, {
-        //             comment_id: res.data.author_id,
-        //             author_id: res.data.author_id,
-        //             post_id: res.data.post_id,
-        //             content: res.data.content,
-        //             username: user.data.username
-        //         }])
-        //         setNewCommentContent('')
-        //     }).catch(err => console.log("Error adding new comment: ", err));
-        // })
         
     }
 
     const Comments = postComments.map(comment => 
-         (<div  className={classes.comment}>
+         (<div key={comment.comment_id}  className={classes.comment}>
              <div className={classes.userAvatar}>
                     <img className={classes.userAvatarImage} src="https://assets.atdw-online.com.au/images/9a9e6bc10a768c84cb66b7fda9149e2a.jpeg?rect=0,1071,3672,2754&w=745&h=559&&rot=360" alt="" />
                 </div>

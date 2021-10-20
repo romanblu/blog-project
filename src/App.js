@@ -1,12 +1,11 @@
 // import './App.css';
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import PostPage from './pages/PostPage';
-import NewPost from './pages/NewPost';
 import Logout from './pages/Logout';
 import EditPost from './pages/EditPost';
 import Profile from './pages/Profile';

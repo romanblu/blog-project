@@ -1,11 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import PostComments from './PostComments';
 import { withStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
@@ -131,39 +128,7 @@ class Post extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-                // <div className="post">
-                //     <div className="content">
-                //         <div className="post-image">
-                //             <img src={this.props.imageSrc} alt="nice alpaca"/>
-                //         </div>
-                //         <div className="post-date">
-                //                 Posted {this.props.datePosted} by {this.state.authorName}
-                //         </div>
-                //         <div className="content-holder">
-                //             <h3><Link to={`/post/${this.state.id}`} className="blog-title">{this.props.title}</Link></h3>
-                            
-                //             <p className="description">{this.props.description}</p>
-                //         </div>  
-                //     </div>
-                //     {this.state.isAuthor ? 
-                //         <div className="edit-delete">
-                //             <button class="delete-post-button" onClick={this.handlePostDelete} className="delete-post">Delete</button> 
-                //             <button onClick={this.handlePostEdit} className="edit-post">
-                //                 <Link class="edit-post-button" to={{pathname:`/edit-post/${this.state.id}`,
-                //                             state:{title:this.state.title,
-                //                                     content:this.state.content,
-                //                                     image:this.state.image}
-                //                             }
-                //                         }>
-                //                     Edit
-                //                 </Link>
-                                
-                //             </button>
-                //         </div> : ''
-                //     }
-
-                //     <PostComments postId={this.state.id} authorId={this.state.authorId}/>
-                // </div>
+              
                 <Card className={classes.root}>
                         <CardMedia onClick={this.redirectToPost}
                             className={classes.media}

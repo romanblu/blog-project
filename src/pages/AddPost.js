@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
+import {Button, TextField, Typography} from '@material-ui/core';
 import axios from 'axios';
 import { Redirect } from "react-router";
 
@@ -68,7 +68,6 @@ class AddPost extends React.Component{
         "indent outdent | numlist bullist | " +
         "link unlink | hr table image | fullscreen code | undo redo";
     
-        console.log("USER ID : ",this.props.user)
 
         return (
             

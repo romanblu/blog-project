@@ -1,6 +1,5 @@
 import React from 'react';
 import Post from '../Components/Post';
-import PostsList from '../Components/PostsList';
 import axios from 'axios';
 import { withStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
@@ -45,7 +44,6 @@ class MainPage extends React.Component{
 
     getAuthorNameById = () => {
         return new Promise( resolve => {
-            // setTimeout(() => { resolve("ROMEOOOO")}, 2000);
         }
         )
     }
@@ -53,9 +51,7 @@ class MainPage extends React.Component{
     getAllPosts = () => {
         const url = "/api/posts";
         axios.get(url).then((res) => {
-            
-          console.log(res.data);
-          this.setState({
+            this.setState({
             data:res.data,
             resp:null
           });
@@ -88,7 +84,7 @@ class MainPage extends React.Component{
         this.getAuthorNameById().then(res => console.log(res));
         
         const postItems = this.state.data.map(post => (
-            <Grid item xs={4}>
+            <Grid key={post.id} item xs={4}>
                 <Post key={post.id} 
                     title={post.title} 
                     description={this.describeContent(post.content)}

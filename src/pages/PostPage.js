@@ -1,9 +1,7 @@
 import React from 'react';
-import PostsList from '../Components/PostsList';
-import Post from '../Components/Post';
 import axios from 'axios';
-import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
-import { mergeClasses, withStyles } from '@material-ui/styles';
+import {Button, Typography} from '@material-ui/core';
+import {  withStyles } from '@material-ui/styles';
 import {Link} from 'react-router-dom';
 import { Redirect } from 'react-router';
 import PostComments from '../Components/PostComments';
@@ -144,7 +142,6 @@ class PostPage extends React.Component {
     render () {
         
         const { classes } = this.props;
-        console.log(this.state)
         
         return (
             
@@ -158,7 +155,7 @@ class PostPage extends React.Component {
                         <Typography className={classes.author} component="p" variant="h6" align="left" >
                             writen by {this.state.authorName}
                         </Typography>
-                        <img className={classes.image} src={this.state.image}/>
+                        <img className={classes.image} src={this.state.image} alt="profile"/>
                         {this.editDeleteButtons()}
                         <div className={classes.content} dangerouslySetInnerHTML={{__html:this.state.content}}>
 
